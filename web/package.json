@@ -1,0 +1,16 @@
+{
+  "name": "ravendb-cdc-demo-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Split-screen demo app: SQL Server (legacy) on the left, RavenDB CDC Sink read model on the right.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mssql": "^11.0.1",
+    "ravendb": "^7.2.6"
+  }
+}

@@ -1,0 +1,1581 @@
+:root {
+  /* RavenDB brand (from ravendb.net) */
+  --raven-bg: #181826;
+  --raven-bg-alt: #1f1f33;
+  --raven-blue: #388ee9;
+  --raven-purple: #7b51ff;
+  --raven-gradient: linear-gradient(136deg, var(--raven-blue), var(--raven-purple) 85%);
+  --raven-text: #f4f5f7;
+  --raven-text-muted: #98a7b7;
+
+  /* Microsoft SQL Server brand (from microsoft.com) */
+  --ms-blue: #0078d4;
+  --ms-blue-dark: #0067b8;
+  --ms-bg: #ffffff;
+  --ms-text: #262626;
+  --ms-text-muted: #616161;
+  --ms-border: #e1e1e1;
+
+  --status-ok: #37c4ac;
+  --status-down: #e5484d;
+
+  --font-raven: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ms: "Segoe UI", SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--raven-bg);
+  color: var(--raven-text);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Header (RavenDB style) ---------- */
+
+.raven-header {
+  background: var(--raven-bg);
+  border-bottom: 3px solid transparent;
+  border-image: var(--raven-gradient) 1;
+  padding: 1.25rem 2rem;
+  font-family: var(--font-raven);
+}
+
+.raven-header-top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.raven-logo {
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.raven-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.raven-header-text h1 {
+  margin: 0 0 0.15rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.raven-header-text p {
+  margin: 0;
+  color: var(--raven-text-muted);
+  font-size: 0.92rem;
+}
+
+.raven-expand-toggle {
+  background: transparent;
+  border: 1px solid var(--raven-blue);
+  color: var(--raven-blue);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.raven-expand-toggle:hover {
+  background: rgba(56, 142, 233, 0.15);
+}
+
+.raven-header-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d6dae3;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  max-width: 920px;
+}
+
+.raven-header-details p {
+  margin: 0 0 0.6rem;
+}
+
+.raven-header-details a {
+  color: #9fc3f0;
+}
+
+.raven-header-byline {
+  color: var(--raven-text-muted);
+  font-style: italic;
+  margin-bottom: 0 !important;
+}
+
+/* ---------- Split screen ---------- */
+
+.split-screen {
+  flex: 1;
+  display: flex;
+}
+
+.panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.panel-body {
+  flex: 1;
+  padding: 1.75rem 2rem;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.panel-heading h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.panel-settings-button {
+  background: none;
+  border: 1px solid rgba(127, 127, 127, 0.35);
+  border-radius: 999px;
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.panel-settings-button:hover {
+  opacity: 1;
+}
+
+.panel-sql .panel-settings-button {
+  color: var(--ms-blue-dark);
+}
+
+.panel-ravendb .panel-settings-button {
+  color: var(--raven-text);
+}
+
+/* Right-aligned group of controls in a panel header (toggles + admin
+   buttons) — keeps configuration/reset commands visually separate from the
+   dashboard content below, and consistent between both panels. */
+.panel-heading-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.panel-admin-button {
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  white-space: nowrap;
+  background: rgba(229, 72, 77, 0.12);
+  border: 1px solid rgba(229, 72, 77, 0.5);
+  color: var(--status-down);
+}
+
+.panel-admin-button:hover:not(:disabled) {
+  background: rgba(229, 72, 77, 0.22);
+}
+
+.panel-admin-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* SQL Server panel — Microsoft style */
+
+.panel-sql {
+  background: var(--ms-bg);
+  color: var(--ms-text);
+  font-family: var(--font-ms);
+}
+
+.panel-sql .panel-heading h2 {
+  color: var(--ms-blue-dark);
+}
+
+.panel-sql .panel-placeholder {
+  color: var(--ms-text-muted);
+  font-style: italic;
+}
+
+/* RavenDB panel */
+
+.panel-ravendb {
+  background: var(--raven-bg-alt);
+  color: var(--raven-text);
+  font-family: var(--font-raven);
+}
+
+.panel-ravendb .panel-heading h2 {
+  color: var(--raven-text);
+}
+
+.panel-ravendb .panel-placeholder {
+  color: var(--raven-text-muted);
+  font-style: italic;
+}
+
+.raven-icon {
+  height: 20px;
+}
+
+/* ---------- Panel footers (connection status) ---------- */
+
+.panel-footer {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 2rem;
+  font-size: 0.8rem;
+}
+
+.panel-footer-loading {
+  padding: 0.85rem 2rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.panel-sql .panel-footer,
+.panel-sql .panel-footer-loading {
+  border-top: 1px solid var(--ms-border);
+  background: #f9f9f9;
+  color: var(--ms-text-muted);
+}
+
+.panel-ravendb .panel-footer,
+.panel-ravendb .panel-footer-loading {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--raven-text-muted);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.status-ok {
+  background: var(--status-ok);
+  box-shadow: 0 0 0 3px rgba(55, 196, 172, 0.2);
+}
+
+.status-down {
+  background: var(--status-down);
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.2);
+}
+
+.panel-footer-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-footer-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.panel-sql .panel-footer-row strong {
+  color: var(--ms-text);
+}
+
+.panel-ravendb .panel-footer-row strong {
+  color: var(--raven-text);
+}
+
+.panel-footer-meta {
+  margin-top: 0.2rem;
+}
+
+.panel-footer-meta span:not(:last-child)::after {
+  content: "\2022";
+  margin-left: 0.5rem;
+  opacity: 0.5;
+}
+
+.panel-footer-tag {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  opacity: 0.75;
+}
+
+.panel-footer-error-msg {
+  color: var(--status-down);
+  margin-top: 0.25rem;
+}
+
+/* ---------- CDC capture toggle (SQL panel only) ---------- */
+
+.cdc-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cdc-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.cdc-toggle-switch .cdc-toggle-thumb {
+  width: 10px;
+  height: 10px;
+}
+
+.cdc-toggle-switch input:checked + .cdc-toggle-track .cdc-toggle-thumb {
+  transform: translateX(12px);
+}
+
+.cdc-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cdc-toggle-track {
+  position: absolute;
+  inset: 0;
+  background: #c7c7c7;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.cdc-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.cdc-toggle-switch input:checked + .cdc-toggle-track {
+  background: var(--status-ok);
+}
+
+.cdc-toggle-switch input:checked + .cdc-toggle-track .cdc-toggle-thumb {
+  transform: translateX(16px);
+}
+
+.cdc-toggle-switch input:disabled + .cdc-toggle-track {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cdc-toggle-label {
+  font-size: 0.7rem;
+  color: var(--ms-text-muted);
+  white-space: nowrap;
+}
+
+.cdc-toggle-error {
+  color: var(--status-down);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+/* ---------- SQL panel: table admin UI ---------- */
+
+.panel-sql .panel-heading h2 {
+  font-size: 0.95rem;
+}
+
+.sql-loading,
+.sql-error {
+  padding: 0.6rem 0;
+  font-size: 0.83rem;
+}
+
+.sql-error {
+  color: var(--status-down);
+}
+
+/* Context panel */
+
+.sql-context {
+  margin-bottom: 1.1rem;
+  border: 1px solid var(--ms-border);
+  border-radius: 6px;
+  background: #f6f8fa;
+}
+
+.sql-context-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  padding: 0.65rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ms-blue-dark);
+  cursor: pointer;
+  text-align: left;
+}
+
+.sql-context-summary {
+  flex: 1;
+}
+
+.sql-context-chevron {
+  flex-shrink: 0;
+  color: var(--ms-text-muted);
+}
+
+.sql-context-body {
+  padding: 0 0.9rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ms-text);
+  line-height: 1.55;
+  border-top: 1px solid var(--ms-border);
+}
+
+.sql-context-body p {
+  margin: 0.75rem 0 0;
+}
+
+.sql-context-stats {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
+.sql-context-stats li {
+  font-size: 0.8rem;
+  color: var(--ms-text-muted);
+}
+
+.sql-context-stat-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--ms-blue);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.sql-context-hint {
+  font-style: italic;
+  color: var(--ms-text-muted);
+}
+
+/* Sidebar + main layout */
+
+.sql-body {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.sql-sidebar {
+  flex-shrink: 0;
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.sql-sidebar-loading {
+  font-size: 0.82rem;
+  color: var(--ms-text-muted);
+}
+
+.sql-sidebar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 0.45rem 0.6rem;
+  font-family: inherit;
+  font-size: 0.83rem;
+  color: var(--ms-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.sql-sidebar-item:hover {
+  background: #f0f4f8;
+}
+
+.sql-sidebar-item-active {
+  background: #e5f1fb;
+  color: var(--ms-blue-dark);
+  font-weight: 600;
+}
+
+.sql-sidebar-count {
+  font-size: 0.72rem;
+  color: var(--ms-text-muted);
+}
+
+.sql-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Table view (list) */
+
+.sql-table-toolbar {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.sql-search,
+.sql-filter {
+  font-family: inherit;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--ms-border);
+  border-radius: 4px;
+}
+
+.sql-search {
+  flex: 1;
+  min-width: 140px;
+}
+
+.sql-new-button {
+  margin-left: auto;
+  background: var(--ms-blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.sql-new-button:hover {
+  background: var(--ms-blue-dark);
+}
+
+.sql-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.sql-grid th {
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 2px solid var(--ms-border);
+  color: var(--ms-text-muted);
+  font-weight: 600;
+}
+
+.sql-grid td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sql-grid-row {
+  cursor: pointer;
+}
+
+.sql-grid-row:hover {
+  background: #f6f8fa;
+}
+
+.sql-empty {
+  text-align: center;
+  color: var(--ms-text-muted);
+  padding: 1rem;
+}
+
+.sql-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--ms-text-muted);
+}
+
+.sql-pagination button {
+  background: white;
+  border: 1px solid var(--ms-border);
+  border-radius: 4px;
+  padding: 0.25rem 0.6rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.sql-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sql-table-view-compact .sql-grid {
+  font-size: 0.78rem;
+}
+
+/* Detail / edit form */
+
+.sql-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.sql-back-link {
+  background: none;
+  border: none;
+  color: var(--ms-blue);
+  font-family: inherit;
+  font-size: 0.83rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sql-edit-button,
+.sql-save-button,
+.sql-cancel-button,
+.sql-delete-button {
+  font-family: inherit;
+  font-size: 0.82rem;
+  border-radius: 4px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  border: 1px solid var(--ms-border);
+  background: white;
+}
+
+.sql-save-button {
+  background: var(--ms-blue);
+  color: white;
+  border-color: var(--ms-blue);
+}
+
+.sql-save-button:hover {
+  background: var(--ms-blue-dark);
+}
+
+.sql-save-button:disabled,
+.sql-cancel-button:disabled,
+.sql-delete-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sql-delete-button {
+  color: var(--status-down);
+  border-color: var(--status-down);
+}
+
+.sql-delete-button:hover {
+  background: #fdecea;
+}
+
+.sql-detail-title {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.sql-detail-form {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  row-gap: 0.6rem;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.sql-field-label {
+  font-size: 0.8rem;
+  color: var(--ms-text-muted);
+}
+
+.sql-required {
+  color: var(--status-down);
+  margin-left: 0.15rem;
+}
+
+.sql-field-value {
+  font-size: 0.85rem;
+}
+
+.sql-field-empty {
+  color: var(--ms-text-muted);
+}
+
+.sql-field,
+.sql-field-textarea {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--ms-border);
+  border-radius: 4px;
+  width: 100%;
+}
+
+.sql-field-textarea {
+  resize: vertical;
+}
+
+.sql-parent-link {
+  background: none;
+  border: none;
+  color: var(--ms-blue);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.sql-detail-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+/* Tabs for 1:N child relations */
+
+.sql-tabs {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--ms-border);
+  padding-top: 1rem;
+}
+
+.sql-tabs-header {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.sql-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #f6f8fa;
+  border: 1px solid var(--ms-border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 0.4rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--ms-text);
+}
+
+.sql-tab-source {
+  font-size: 0.65rem;
+  color: var(--ms-text-muted);
+}
+
+.sql-tab-active {
+  background: white;
+  border-color: var(--ms-blue);
+  color: var(--ms-blue-dark);
+  font-weight: 600;
+}
+
+/* ---------- Footer (RavenDB style) ---------- */
+
+.raven-footer {
+  background: var(--raven-bg);
+  padding: 1rem 2rem;
+  font-family: var(--font-raven);
+  font-size: 0.82rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.raven-footer-docs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.raven-footer-label {
+  color: var(--raven-text-muted);
+  margin-right: 0.25rem;
+}
+
+.raven-footer-docs a {
+  color: #9fc3f0;
+  text-decoration: none;
+}
+
+.raven-footer-docs a:hover {
+  text-decoration: underline;
+  color: var(--raven-blue);
+}
+
+.raven-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.raven-footer-link {
+  color: var(--raven-text-muted);
+  text-decoration: none;
+}
+
+.raven-footer-link:hover {
+  color: var(--raven-text);
+}
+
+.raven-footer-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--raven-text);
+  text-decoration: none;
+  margin-left: auto;
+}
+
+.raven-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--raven-gradient);
+  color: white;
+  font-weight: 700;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.raven-footer-author:hover .raven-avatar {
+  filter: brightness(1.15);
+}
+
+@media (max-width: 900px) {
+  .split-screen {
+    flex-direction: column;
+  }
+
+  .raven-header-top {
+    flex-wrap: wrap;
+  }
+
+  .raven-footer-author {
+    margin-left: 0;
+  }
+}
+
+/* ---------- RavenDB panel: adoption portal dashboard ---------- */
+
+.panel-ravendb .raven-loading,
+.panel-ravendb .raven-error {
+  padding: 0.6rem 0;
+  font-size: 0.83rem;
+}
+
+.raven-error {
+  color: var(--status-down);
+}
+
+/* Context accordion */
+
+.raven-context {
+  margin-bottom: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.raven-context-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  padding: 0.65rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #9fc3f0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.raven-context-summary {
+  flex: 1;
+}
+
+.raven-context-chevron {
+  flex-shrink: 0;
+  color: var(--raven-text-muted);
+}
+
+.raven-context-body {
+  padding: 0 0.9rem 0.9rem;
+  font-size: 0.85rem;
+  color: #d6dae3;
+  line-height: 1.55;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.raven-context-body p {
+  margin: 0.75rem 0 0;
+}
+
+.raven-context-hint {
+  font-style: italic;
+  color: var(--raven-text-muted);
+}
+
+/* Dashboard layout */
+
+.raven-dashboard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.raven-stat-tiles {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.raven-stat-tile {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  min-width: 120px;
+}
+
+.raven-stat-value {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--raven-text);
+}
+
+.raven-stat-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--raven-text-muted);
+  margin-top: 0.15rem;
+}
+
+.raven-stat-sub {
+  opacity: 0.7;
+}
+
+/* Task toggles */
+
+.raven-toggles {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.raven-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.raven-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.raven-toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.raven-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.15s ease;
+}
+
+.raven-toggle input:checked + .raven-toggle-track {
+  background: var(--status-ok);
+}
+
+.raven-toggle input:checked + .raven-toggle-track .raven-toggle-thumb {
+  transform: translateX(14px);
+}
+
+.raven-toggle input:disabled + .raven-toggle-track {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.raven-toggle-label {
+  font-size: 0.75rem;
+  color: var(--raven-text-muted);
+  white-space: nowrap;
+}
+
+/* Charts */
+
+.raven-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.raven-chart-card {
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.9rem;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.raven-chart-card-wide {
+  grid-column: span 2;
+}
+
+.raven-chart-card h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: var(--raven-text-muted);
+  font-weight: 600;
+}
+
+.raven-chart-canvas-box {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.raven-chart-canvas-box canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.raven-chart-empty {
+  color: var(--raven-text-muted);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* Adoption / pet grid section */
+
+.raven-adoption-section {
+  margin-top: 0.5rem;
+}
+
+.raven-adoption-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.raven-adoption-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.raven-chat-open-button {
+  background: var(--raven-gradient);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.raven-chat-open-button:hover {
+  filter: brightness(1.1);
+}
+
+.pet-search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.pet-search-input {
+  flex: 1;
+  min-width: 220px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--raven-text);
+}
+
+.pet-search-input::placeholder {
+  color: var(--raven-text-muted);
+}
+
+.pet-search-meta {
+  font-size: 0.75rem;
+  color: var(--raven-text-muted);
+  white-space: nowrap;
+}
+
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.pet-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pet-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.pet-card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--raven-text);
+}
+
+.pet-card-species {
+  font-size: 0.72rem;
+  color: var(--raven-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pet-card-meta {
+  margin: 0.2rem 0 0.6rem;
+  font-size: 0.78rem;
+  color: var(--raven-text-muted);
+}
+
+.pet-card-bio {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #d6dae3;
+  flex: 1;
+}
+
+.pet-card-bio-pending {
+  color: var(--raven-text-muted);
+  font-style: italic;
+}
+
+.pet-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.6rem 0;
+}
+
+.pet-card-tag {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(123, 81, 255, 0.2);
+  color: #c9b8ff;
+  border: 1px solid rgba(123, 81, 255, 0.4);
+}
+
+.pet-card-ask {
+  margin-top: 0.6rem;
+  background: none;
+  border: 1px solid var(--raven-blue);
+  color: #9fc3f0;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.pet-card-ask:hover {
+  background: rgba(56, 142, 233, 0.15);
+}
+
+/* Chat drawer */
+
+.chat-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 40;
+}
+
+.chat-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(380px, 92vw);
+  background: var(--raven-bg);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  z-index: 41;
+  font-family: var(--font-raven);
+}
+
+.chat-drawer-open {
+  transform: translateX(0);
+}
+
+.chat-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-drawer-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--raven-text);
+}
+
+.chat-drawer-close {
+  background: none;
+  border: none;
+  color: var(--raven-text-muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chat-drawer-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.chat-drawer-empty {
+  color: var(--raven-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.55rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.chat-bubble-user {
+  align-self: flex-end;
+  background: var(--raven-gradient);
+  color: white;
+  border-bottom-right-radius: 3px;
+}
+
+.chat-bubble-assistant {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--raven-text);
+  border-bottom-left-radius: 3px;
+}
+
+.chat-bubble-pending {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.chat-drawer-error {
+  margin: 0 1.25rem;
+}
+
+.chat-drawer-input-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-drawer-input-row input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--raven-text);
+}
+
+.chat-drawer-input-row button {
+  background: var(--raven-gradient);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat-drawer-input-row button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .raven-chart-card-wide {
+    grid-column: span 1;
+  }
+}
+
+/* Connection settings modal (shared by both panels) */
+
+.connection-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.connection-modal {
+  background: #1c1c2b;
+  color: #d6dae3;
+  border-radius: 10px;
+  width: min(440px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.connection-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.connection-modal-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.connection-modal-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.connection-modal-close:hover {
+  opacity: 1;
+}
+
+.connection-modal-loading {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.connection-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.connection-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.connection-modal input[type="text"],
+.connection-modal input[type="number"],
+.connection-modal input[type="password"] {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+}
+
+.connection-modal-hint {
+  opacity: 0.65;
+  font-weight: 400;
+}
+
+.connection-modal-checkbox {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+}
+
+.connection-modal-checkbox input {
+  width: auto;
+}
+
+.connection-modal-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.connection-modal-error {
+  font-size: 0.8rem;
+  color: var(--status-down, #e5484d);
+}
+
+.connection-modal-success {
+  font-size: 0.8rem;
+  color: var(--status-ok, #37c4ac);
+}
+
+.connection-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.connection-modal-cancel,
+.connection-modal-save {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.connection-modal-cancel {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+}
+
+.connection-modal-save {
+  background: var(--raven-gradient, linear-gradient(136deg, #388ee9, #7b51ff 85%));
+  color: white;
+  border: none;
+}
+
+.connection-modal-cancel:disabled,
+.connection-modal-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

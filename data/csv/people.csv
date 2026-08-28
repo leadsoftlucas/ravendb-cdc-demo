@@ -1,0 +1,13 @@
+PersonId,FullName,Email,Phone,AddressLine,City,State,Country,DocumentId
+1,"Ana Beatriz Souza","ana.souza@example.com","+55 41 98811-1111","Rua das Flores 120","Curitiba","Parana","Brazil","123.456.789-00"
+2,"Joao Pedro Martins","joao.martins@example.com","+55 41 98822-2222","Av. Sete de Setembro 500","Curitiba","Parana","Brazil","234.567.890-11"
+3,"Emily Carter","emily.carter@example.com","+1 415 555-0134","482 Baker Street","San Francisco","CA","United States",""
+4,"Marcos Vinicius Ferreira","marcos.ferreira@example.com","+55 41 98833-3333","Rua XV de Novembro 88","Curitiba","Parana","Brazil","345.678.901-22"
+5,"Laura Studer","laura.studer@example.com","+41 44 555-0192","Bahnhofstrasse 12","Zurich","ZH","Switzerland",""
+6,"Rafael Goncalves","rafael.goncalves@example.com","+55 41 98844-4444","Rua Marechal Deodoro 300","Curitiba","Parana","Brazil","456.789.012-33"
+7,"Sophie Dubois","sophie.dubois@example.com","+33 4 72 55 01 88","15 Rue de la Republique","Lyon","Auvergne-Rhone-Alpes","France",""
+8,"Patricia Lima","patricia.lima@example.com","+55 41 98855-5555","Rua Padre Anchieta 210","Curitiba","Parana","Brazil","567.890.123-44"
+9,"Daniel Kim","daniel.kim@example.com","+1 416 555-0173","88 Queen Street West","Toronto","ON","Canada",""
+10,"Bruna Cardoso","bruna.cardoso@example.com","+55 41 98866-6666","Rua Comendador Araujo 77","Curitiba","Parana","Brazil","678.901.234-55"
+11,"Carlos Eduardo Rocha","carlos.rocha@example.com","+55 41 98877-7777","Rua Brigadeiro Franco 150","Curitiba","Parana","Brazil","789.012.345-66"
+12,"Michael O'Brien","michael.obrien@example.com","+353 1 555-0166","24 Merrion Square","Dublin","Leinster","Ireland",""

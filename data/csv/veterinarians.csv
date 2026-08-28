@@ -1,0 +1,4 @@
+VeterinarianId,EmployeeId,LicenseNumber,Specialty,YearsOfExperience
+1,1,"CRMV-PR 12345","General Practice",7
+2,2,"CRMV-PR 22876","Surgery",4
+3,3,"CRMV-PR 09981","Dermatology",10

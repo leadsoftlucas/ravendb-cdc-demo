@@ -1,0 +1,5 @@
+AdoptionId,ApplicationId,PetId,AdopterId,AdoptionDate,ProcessedByEmployeeId,IncludedVetCheckup,CheckupMedicalRecordId
+1,1,6,5,2025-11-02,6,1,7
+2,2,9,7,2025-12-10,6,0,
+3,3,12,9,2026-01-15,4,1,16
+4,4,15,12,2026-02-20,6,0,

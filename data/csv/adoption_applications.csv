@@ -1,0 +1,8 @@
+ApplicationId,PetId,ApplicantId,HandledByEmployeeId,ApplicationDate,Status,Notes,DecisionDate
+1,6,5,6,2025-10-15,"Approved","Home visit completed, fenced yard confirmed.",2025-10-30
+2,9,7,6,2025-11-20,"Approved","Experienced with bulldogs, vet reference provided.",2025-12-05
+3,12,9,4,2025-12-20,"Approved","Indoor-only cat household, good fit.",2026-01-10
+4,15,12,6,2026-02-01,"Approved","Large fenced garden, prior golden retriever owner.",2026-02-15
+5,8,10,6,2026-08-10,"UnderReview","Waiting on landlord pet authorization letter.",
+6,13,3,4,2026-08-20,"Pending","Initial interview scheduled for next week.",
+7,4,1,6,2025-06-05,"Rejected","Applicant already has two cats and a small apartment; not a good fit for a still-timid rescue.",2025-06-12

@@ -1,0 +1,21 @@
+MedicalRecordId,PetId,VeterinarianId,VisitDate,ReasonForVisit,Symptoms,Diagnosis,Treatment,WeightKg,FollowUpDate
+1,1,1,2026-02-10 09:30:00,"Annual checkup","None reported","Healthy adult dog","Routine vaccination booster",29.50,2027-02-10
+2,2,2,2026-01-22 14:00:00,"Dental cleaning","Mild tartar buildup","Grade 1 dental tartar","Professional cleaning under sedation",4.10,
+3,3,3,2025-03-03 10:15:00,"Shelter intake exam","Underweight, dehydrated","Malnutrition, mild dehydration","Fluids and controlled refeeding plan",14.20,2025-03-17
+4,4,1,2025-05-19 11:00:00,"Shelter intake exam","Anxious, flinches at loud noise","Stress-related hypervigilance, otherwise healthy","Quiet enclosure, gradual socialization",3.10,2025-06-02
+5,5,2,2025-09-14 15:45:00,"Skin irritation","Scratching, redness on flank","Mild contact dermatitis","Medicated shampoo and antihistamine",8.70,2025-09-28
+6,6,1,2025-02-12 09:00:00,"Shelter intake exam","None reported","Healthy adult dog","Standard shelter vaccination protocol",21.00,
+7,6,1,2025-10-28 10:30:00,"Pre-adoption checkup","None reported","Cleared for adoption","None required",21.80,
+8,7,3,2026-03-05 13:00:00,"Annual checkup","None reported","Healthy adult cat","Routine vaccination booster",4.60,2027-03-05
+9,8,2,2025-07-23 09:15:00,"Shelter intake exam","None reported","Healthy adult dog","Standard shelter vaccination protocol",11.30,
+10,8,2,2025-08-20 10:00:00,"Socialization follow-up","None reported","Good progress, friendly with other dogs","Continue supervised group play",11.60,
+11,9,3,2025-01-15 08:45:00,"Shelter intake exam","Mild limp on left hind leg","Soft tissue strain","Rest and anti-inflammatory course",18.90,2025-01-29
+12,10,1,2026-02-11 12:00:00,"Injury treatment","Wound on right front paw","Superficial laceration","Cleaning, bandage, oral antibiotics",3.80,2026-02-25
+13,10,1,2026-02-25 09:30:00,"Follow-up","Healing well, still cautious","Wound healed, mild residual timidity","Continue socialization, no restrictions",4.00,
+14,11,2,2026-01-08 16:00:00,"Annual checkup","None reported","Healthy adult dog","Routine vaccination booster",44.30,2027-01-08
+15,12,3,2025-04-10 11:30:00,"Shelter intake exam","None reported","Healthy adult cat","Standard shelter vaccination protocol",3.90,
+16,12,3,2026-01-05 10:00:00,"Pre-adoption checkup","None reported","Cleared for adoption","None required",4.20,
+17,13,1,2026-01-06 09:00:00,"Shelter intake exam","High energy, restless in kennel","Healthy, needs active environment","Enrichment plan, daily exercise routine",16.40,
+18,13,1,2026-02-03 10:30:00,"Behavior follow-up","Still very energetic","Good physical health, behavior improving","Continue enrichment and training",17.00,
+19,14,2,2026-03-01 14:30:00,"Annual checkup","None reported","Healthy adult rabbit","Nail trim and dental check",1.60,2027-03-01
+20,15,3,2025-07-01 09:00:00,"Shelter intake exam","None reported","Healthy adult dog, already house-trained","Standard shelter vaccination protocol",28.50,

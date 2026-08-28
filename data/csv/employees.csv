@@ -1,0 +1,7 @@
+EmployeeId,ClinicId,FullName,Department,JobTitle,Email,Phone,HiredDate
+1,1,"Camila Rezende","Clinical","Veterinarian","camila.rezende@vidaanimal.vet","+55 41 99811-2233",2019-03-11
+2,1,"Henrique Alves","Clinical","Veterinarian","henrique.alves@vidaanimal.vet","+55 41 99822-3344",2021-06-01
+3,1,"Marcos Lima","Clinical","Veterinarian","marcos.lima@vidaanimal.vet","+55 41 99833-4455",2016-01-20
+4,1,"Beatriz Fontes","Shelter","Rescue Coordinator","beatriz.fontes@vidaanimal.vet","+55 41 99844-5566",2020-02-14
+5,1,"Rodrigo Nunes","Shelter","Animal Caretaker","rodrigo.nunes@vidaanimal.vet","+55 41 99855-6677",2022-05-09
+6,1,"Juliana Prado","Shelter","Adoption Coordinator","juliana.prado@vidaanimal.vet","+55 41 99866-7788",2018-11-03

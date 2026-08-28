@@ -1,0 +1,19 @@
+# Secrets / local config
+.env
+*.local.json
+appsettings.Development.json
+appsettings.*.local.json
+
+# .NET
+bin/
+obj/
+*.user
+
+# Node
+node_modules/
+dist/
+
+# OS / editor
+.vs/
+.vscode/
+.DS_Store
