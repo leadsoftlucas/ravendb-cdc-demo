@@ -1,4 +1,5 @@
 function CdcCaptureToggle() {
+  const { t } = useI18n();
   const [running, setRunning] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [pending, setPending] = React.useState(false);
@@ -54,9 +55,10 @@ function CdcCaptureToggle() {
           <span className="cdc-toggle-thumb" />
         </span>
       </label>
-      <span className="cdc-toggle-label" title="Starts/stops the SQL Server CDC capture job">
-        {pending ? "Updating…" : `CDC capture: ${running ? "on" : "off"}`}
+      <span className="cdc-toggle-label">
+        {pending ? t("cdcToggle.updating") : running ? t("cdcToggle.on") : t("cdcToggle.off")}
       </span>
+      <InfoHint text={t("hint.cdcCapture")} />
       {error && <span className="cdc-toggle-error">{error}</span>}
     </div>
   );

@@ -1,4 +1,5 @@
 function FieldInput({ column, value, onChange }) {
+  const { t } = useI18n();
   const [lookupOptions, setLookupOptions] = React.useState(null);
 
   React.useEffect(() => {
@@ -41,7 +42,7 @@ function FieldInput({ column, value, onChange }) {
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}
       >
-        {(column.nullable || !value) && <option value="">— none —</option>}
+        {(column.nullable || !value) && <option value="">{t("sql.none")}</option>}
         {(lookupOptions || []).map((opt) => (
           <option key={opt.Id} value={opt.Id}>
             {opt.Label}

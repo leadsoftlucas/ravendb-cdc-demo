@@ -11,6 +11,7 @@ function ParentLink({ parent }) {
 }
 
 function SqlRecordDetail() {
+  const { t, locale, tTable, tColumn, tSingular, tGender } = useI18n();
   const { schema, selectedTable, selectedId, view, backToList, openRecord, refreshAll } = useSql();
   const def = schema ? schema.tables[selectedTable] : null;
 
@@ -68,8 +69,8 @@ function SqlRecordDetail() {
     }
   }, [def]);
 
-  if (!def) return <div className="sql-loading">Loading…</div>;
-  if (loading) return <div className="sql-loading">Loading record…</div>;
+  if (!def) return <div className="sql-loading">{t("sql.loading")}</div>;
+  if (loading) return <div className="sql-loading">{t("sql.loadingRecord")}</div>;
 
   function updateField(name, value) {
     setFormValues((v) => ({ ...v, [name]: value }));
@@ -109,8 +110,9 @@ function SqlRecordDetail() {
   }
 
   async function handleDelete() {
-    const noun = def.label.replace(/s$/, "").toLowerCase();
-    if (!window.confirm(`Delete this ${noun}? This can't be undone.`)) return;
+    const noun = (locale === "pt" ? tSingular(selectedTable, def.label.replace(/s$/, "")) : def.label.replace(/s$/, "")).toLowerCase();
+    const demonstrative = tGender(selectedTable) === "f" ? "esta" : "este";
+    if (!window.confirm(t("sql.deleteConfirm", { noun, demonstrative }))) return;
 
     setSaving(true);
     setError(null);
@@ -137,22 +139,27 @@ function SqlRecordDetail() {
   }
 
   const editableColumns = def.columns.filter((c) => !c.pk);
+  const tableLabel = tTable(selectedTable, def.label);
+  const singularNoun = locale === "pt" ? tSingular(selectedTable, def.label.replace(/s$/, "")) : def.label.replace(/s$/, "");
+  const newArticle = locale === "pt" ? (tGender(selectedTable) === "f" ? "Nova" : "Novo") : "New";
 
   return (
     <div className="sql-detail">
       <div className="sql-detail-header">
         <button type="button" className="sql-back-link" onClick={backToList}>
-          ← Back to {def.label}
+          {t("sql.backTo", { label: tableLabel })}
         </button>
         {!editing && view !== "new" && (
           <button type="button" className="sql-edit-button" onClick={() => setEditing(true)}>
-            Edit
+            {t("sql.edit")}
           </button>
         )}
       </div>
 
       <h3 className="sql-detail-title">
-        {view === "new" ? `New ${def.label.replace(/s$/, "")}` : `${def.label.replace(/s$/, "")} #${selectedId}`}
+        {view === "new"
+          ? t("sql.newTitle", { article: newArticle, noun: singularNoun })
+          : t("sql.recordTitle", { noun: singularNoun, id: selectedId })}
       </h3>
 
       {error && <div className="sql-error">{error}</div>}
@@ -161,7 +168,7 @@ function SqlRecordDetail() {
         {editableColumns.map((col) => (
           <React.Fragment key={col.name}>
             <label className="sql-field-label">
-              {col.label}
+              {tColumn(selectedTable, col.name, col.label)}
               {!col.nullable && <span className="sql-required">*</span>}
             </label>
             {editing ? (
@@ -169,7 +176,7 @@ function SqlRecordDetail() {
             ) : col.type === "fk" ? (
               <ParentLink parent={parents.find((p) => p.column === col.name)} />
             ) : (
-              <span className="sql-field-value">{formatCellValue(row[col.name])}</span>
+              <span className="sql-field-value">{formatCellValue(row[col.name], t)}</span>
             )}
           </React.Fragment>
         ))}
@@ -178,10 +185,10 @@ function SqlRecordDetail() {
       {editing && (
         <div className="sql-detail-actions">
           <button type="button" className="sql-save-button" onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save"}
+            {saving ? t("sql.saving") : t("sql.save")}
           </button>
           <button type="button" className="sql-cancel-button" onClick={handleCancel} disabled={saving}>
-            Cancel
+            {t("sql.cancel")}
           </button>
         </div>
       )}
@@ -189,7 +196,7 @@ function SqlRecordDetail() {
       {!editing && view !== "new" && (
         <div className="sql-detail-actions">
           <button type="button" className="sql-delete-button" onClick={handleDelete} disabled={saving}>
-            Delete
+            {t("sql.delete")}
           </button>
         </div>
       )}
@@ -205,10 +212,10 @@ function SqlRecordDetail() {
                   type="button"
                   className={`sql-tab ${activeTab === key ? "sql-tab-active" : ""}`}
                   onClick={() => setActiveTab(key)}
-                  title={`Related via ${child.table}.${child.fk}`}
+                  title={t("sql.relatedVia", { table: child.table, fk: child.fk })}
                 >
-                  {child.label}
-                  <span className="sql-tab-source">via {child.fk}</span>
+                  {tTable(child.table, child.label)}
+                  <span className="sql-tab-source">{t("sql.viaFk", { fk: child.fk })}</span>
                 </button>
               );
             })}

@@ -10,22 +10,40 @@ async function getPetStats() {
   return { rows: result.Results, durationMs: result.DurationInMs, indexName: result.IndexName };
 }
 
-function buildAvailablePetsQuery(description) {
-  const baseSelect =
-    "select Name, Species, Breed, Sex, Status, Origin, AI.AdoptionBio as AdoptionBio, " +
-    "AI.TemperamentTags as TemperamentTags, PetId";
+// A JS projection (not a plain field list) so vaccination/medical history —
+// real clinic data embedded on the pet, not AI-generated — shows up as flat,
+// display-ready fields for the pet cards, same fields the AI Agent's search
+// tool exposes (see web/lib/agentConfig.js).
+function projection() {
+  return `select {
+    Name: p.Name,
+    Species: p.Species,
+    Breed: p.Breed,
+    Sex: p.Sex,
+    Status: p.Status,
+    Origin: p.Origin,
+    PetId: p.PetId,
+    AdoptionBio: p.AI.AdoptionBio,
+    TemperamentTags: p.AI.TemperamentTags,
+    isVaccinated: p.Vaccinations && p.Vaccinations.length > 0,
+    vaccinationCount: p.Vaccinations ? p.Vaccinations.length : 0,
+    lastVaccineName: p.Vaccinations && p.Vaccinations.length ? p.Vaccinations[p.Vaccinations.length - 1].VaccineName : null,
+    medicalVisitCount: p.MedicalHistory ? p.MedicalHistory.length : 0
+  }`;
+}
 
+function buildAvailablePetsQuery(description) {
   if (description && description.trim()) {
     return {
       Query:
-        `from Pets where vector.search(embedding.text(AI.FullDescription, ai.task('${EMBEDDINGS_IDENTIFIER}')), $description, 0.45) ` +
-        `and Status in ('InShelter', 'PendingAdoption') ${baseSelect}`,
+        `from Pets as p where vector.search(embedding.text(p.AI.FullDescription, ai.task('${EMBEDDINGS_IDENTIFIER}')), $description, 0.45) ` +
+        `and p.Status in ('InShelter', 'PendingAdoption') ${projection()}`,
       QueryParameters: { description },
     };
   }
 
   return {
-    Query: `from Pets where Status in ('InShelter', 'PendingAdoption') ${baseSelect}`,
+    Query: `from Pets as p where p.Status in ('InShelter', 'PendingAdoption') ${projection()}`,
     QueryParameters: {},
   };
 }

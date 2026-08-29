@@ -1,10 +1,16 @@
-const TASK_LABELS = {
-  CdcSink: "CDC Sink",
-  GenAi: "GenAI enrichment",
-  EmbeddingsGeneration: "Embeddings",
+const TASK_LABEL_KEYS = {
+  CdcSink: "raven.toggleCdcSink",
+  GenAi: "raven.toggleGenAi",
+  EmbeddingsGeneration: "raven.toggleEmbeddings",
 };
 
-function TaskToggleSwitch({ label, checked, disabled, onChange }) {
+const TASK_HINT_KEYS = {
+  CdcSink: "hint.cdcSink",
+  GenAi: "hint.genAi",
+  EmbeddingsGeneration: "hint.embeddings",
+};
+
+function TaskToggleSwitch({ label, hint, checked, disabled, onChange }) {
   return (
     <label className="raven-toggle" title={label}>
       <input type="checkbox" checked={checked} disabled={disabled} onChange={onChange} />
@@ -12,11 +18,13 @@ function TaskToggleSwitch({ label, checked, disabled, onChange }) {
         <span className="raven-toggle-thumb" />
       </span>
       <span className="raven-toggle-label">{label}</span>
+      {hint && <InfoHint text={hint} />}
     </label>
   );
 }
 
 function RavenTaskToggles() {
+  const { t } = useI18n();
   const [tasks, setTasks] = React.useState([]);
   const [agentEnabled, setAgentEnabledState] = React.useState(true);
   const [pending, setPending] = React.useState(null);
@@ -72,14 +80,16 @@ function RavenTaskToggles() {
       {tasks.map((task) => (
         <TaskToggleSwitch
           key={task.taskId}
-          label={TASK_LABELS[task.type] || task.type}
+          label={TASK_LABEL_KEYS[task.type] ? t(TASK_LABEL_KEYS[task.type]) : task.type}
+          hint={TASK_HINT_KEYS[task.type] && t(TASK_HINT_KEYS[task.type])}
           checked={task.enabled}
           disabled={pending === task.taskId}
           onChange={() => toggleTask(task)}
         />
       ))}
       <TaskToggleSwitch
-        label="Adoption Concierge"
+        label={t("raven.toggleAgent")}
+        hint={t("hint.agent")}
         checked={agentEnabled}
         disabled={pending === "agent"}
         onChange={toggleAgent}

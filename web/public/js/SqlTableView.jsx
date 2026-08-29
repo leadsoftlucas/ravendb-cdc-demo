@@ -1,4 +1,5 @@
 function SqlTableView({ table, filterColumn, filterValue, compact }) {
+  const { t, locale, tTable, tColumn, tSingular, tGender } = useI18n();
   const { schema, openRecord, openNew, getListState, setListState, refreshToken } = useSql();
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
@@ -49,11 +50,15 @@ function SqlTableView({ table, filterColumn, filterValue, compact }) {
     load();
   }, [load]);
 
-  if (!def) return <div className="sql-loading">Loading…</div>;
+  if (!def) return <div className="sql-loading">{t("sql.loading")}</div>;
 
   function updateState(patch) {
     setListState(stateKey, patch);
   }
+
+  const tableLabel = tTable(table, def.label);
+  const singularNoun = locale === "pt" ? tSingular(table, def.label.replace(/s$/, "")) : def.label.replace(/s$/, "");
+  const newArticle = locale === "pt" ? (tGender(table) === "f" ? "Nova" : "Novo") : "New";
 
   return (
     <div className={`sql-table-view ${compact ? "sql-table-view-compact" : ""}`}>
@@ -62,7 +67,7 @@ function SqlTableView({ table, filterColumn, filterValue, compact }) {
           <input
             type="search"
             className="sql-search"
-            placeholder={`Search ${def.label.toLowerCase()}…`}
+            placeholder={t("sql.searchPlaceholder", { label: tableLabel.toLowerCase() })}
             value={listState.search}
             onChange={(e) => updateState({ search: e.target.value, page: 1 })}
           />
@@ -76,7 +81,7 @@ function SqlTableView({ table, filterColumn, filterValue, compact }) {
               updateState({ filters: { ...(listState.filters || {}), [f.column]: e.target.value }, page: 1 })
             }
           >
-            <option value="">All {f.column}</option>
+            <option value="">{t("sql.filterAll", { label: tColumn(table, f.column, f.column) })}</option>
             {(f.options || []).map((opt) => (
               <option key={opt} value={opt}>
                 {opt}
@@ -85,12 +90,12 @@ function SqlTableView({ table, filterColumn, filterValue, compact }) {
           </select>
         ))}
         <button type="button" className="sql-new-button" onClick={() => openNew(table)}>
-          + New {def.label.replace(/s$/, "")}
+          {t("sql.newRecord", { article: newArticle, noun: singularNoun })}
         </button>
       </div>
 
       {error && <div className="sql-error">{error}</div>}
-      {loading && !data && <div className="sql-loading">Loading…</div>}
+      {loading && !data && <div className="sql-loading">{t("sql.loading")}</div>}
 
       {data && (
         <React.Fragment>
@@ -98,7 +103,7 @@ function SqlTableView({ table, filterColumn, filterValue, compact }) {
             <thead>
               <tr>
                 {def.listColumns.map((col) => (
-                  <th key={col}>{(def.columns.find((c) => c.name === col) || {}).label || col}</th>
+                  <th key={col}>{tColumn(table, col, (def.columns.find((c) => c.name === col) || {}).label || col)}</th>
                 ))}
               </tr>
             </thead>
@@ -106,14 +111,14 @@ function SqlTableView({ table, filterColumn, filterValue, compact }) {
               {data.rows.map((row) => (
                 <tr key={row[def.pk]} onClick={() => openRecord(table, row[def.pk])} className="sql-grid-row">
                   {def.listColumns.map((col) => (
-                    <td key={col}>{formatCellValue(row[col])}</td>
+                    <td key={col}>{formatCellValue(row[col], t)}</td>
                   ))}
                 </tr>
               ))}
               {data.rows.length === 0 && (
                 <tr>
                   <td colSpan={def.listColumns.length} className="sql-empty">
-                    No records found.
+                    {t("sql.noRecords")}
                   </td>
                 </tr>
               )}

@@ -27,14 +27,20 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
+  height: 100%;
+  overflow: hidden;
   background: var(--raven-bg);
   color: var(--raven-text);
 }
 
 .app-shell {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -75,6 +81,45 @@ body {
   margin: 0;
   color: var(--raven-text-muted);
   font-size: 0.92rem;
+}
+
+.language-toggle {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.language-toggle-flag {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  line-height: 1;
+  padding: 0.3rem 0.4rem;
+  cursor: pointer;
+  opacity: 0.45;
+  filter: grayscale(1);
+  transition: opacity 0.15s ease, filter 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.language-toggle-flag img {
+  width: 22px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+}
+
+.language-toggle-flag:hover {
+  opacity: 0.8;
+}
+
+.language-toggle-flag-active {
+  opacity: 1;
+  filter: grayscale(0);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .raven-expand-toggle {
@@ -122,6 +167,7 @@ body {
 
 .split-screen {
   flex: 1;
+  min-height: 0;
   display: flex;
 }
 
@@ -130,23 +176,73 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
 }
 
 .panel-body {
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 1.75rem 2rem;
+}
+
+/* Discreet, theme-matched scrollbars — each panel scrolls independently so
+   its heading and footer (connection status, admin buttons) stay visible
+   at all times instead of scrolling away with the page. */
+.panel-body {
+  scrollbar-width: thin;
+}
+
+.panel-sql .panel-body {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.panel-ravendb .panel-body {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.panel-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+}
+
+.panel-sql .panel-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.panel-sql .panel-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.panel-ravendb .panel-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.panel-ravendb .panel-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .panel-heading {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
   gap: 0.6rem;
-  margin-bottom: 0.75rem;
+  padding: 1.25rem 2rem 0.75rem;
+  flex-shrink: 0;
 }
 
 .panel-heading h2 {
   margin: 0;
   font-size: 1.1rem;
+  white-space: nowrap;
 }
 
 .panel-settings-button {
@@ -323,6 +419,22 @@ body {
   opacity: 0.5;
 }
 
+.panel-footer-studio-link {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+  opacity: 0.75;
+}
+
+.panel-footer-studio-link:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .panel-footer-tag {
   font-size: 0.68rem;
   padding: 0.1rem 0.5rem;
@@ -334,6 +446,173 @@ body {
 .panel-footer-error-msg {
   color: var(--status-down);
   margin-top: 0.25rem;
+}
+
+.panel-footer-extra {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.cdc-log-toggle {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  background: none;
+  border: 1px solid var(--ms-blue);
+  color: var(--ms-blue-dark);
+}
+
+.cdc-log-toggle:hover {
+  background: rgba(0, 120, 212, 0.08);
+}
+
+/* ---------- CDC log panel (SQL panel only, expands below the footer) ---------- */
+
+.cdc-log-panel {
+  padding: 1rem 2rem 1.5rem;
+  border-top: 1px dashed var(--ms-border);
+  background: #f4f6f8;
+  font-size: 0.8rem;
+  max-height: 40vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.cdc-log-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cdc-log-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cdc-log-panel::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+}
+
+.cdc-log-explanation {
+  margin-bottom: 0.75rem;
+  color: var(--ms-text);
+}
+
+.cdc-log-explanation strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--ms-blue-dark);
+}
+
+.cdc-log-explanation p {
+  margin: 0;
+  color: var(--ms-text-muted);
+  line-height: 1.5;
+}
+
+.cdc-log-loading {
+  color: var(--ms-text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+.cdc-log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.cdc-log-table th {
+  text-align: left;
+  padding: 0.35rem 0.6rem;
+  color: var(--ms-text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--ms-border);
+}
+
+.cdc-log-table td {
+  padding: 0.35rem 0.6rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  color: var(--ms-text);
+}
+
+.cdc-log-op {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+}
+
+.cdc-log-op-insert {
+  background: rgba(55, 196, 172, 0.15);
+  color: #1c8a76;
+}
+
+.cdc-log-op-update {
+  background: rgba(245, 166, 35, 0.18);
+  color: #a15c00;
+}
+
+.cdc-log-op-delete {
+  background: rgba(229, 72, 77, 0.15);
+  color: var(--status-down);
+}
+
+/* ---------- Info hint icon (didactic tooltips) ---------- */
+
+.info-hint {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+  margin-left: 0.3rem;
+}
+
+.info-hint-icon {
+  font-size: 0.85em;
+  opacity: 0.55;
+}
+
+.info-hint:hover .info-hint-icon,
+.info-hint:focus .info-hint-icon,
+.info-hint:focus-within .info-hint-icon {
+  opacity: 0.9;
+}
+
+.info-hint-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  width: max-content;
+  max-width: 220px;
+  background: #1c1c2b;
+  color: #d6dae3;
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s ease;
+  z-index: 30;
+  pointer-events: none;
+  text-align: left;
+  white-space: normal;
+}
+
+.info-hint:hover .info-hint-tooltip,
+.info-hint:focus .info-hint-tooltip,
+.info-hint:focus-within .info-hint-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* ---------- CDC capture toggle (SQL panel only) ---------- */
@@ -905,8 +1184,32 @@ body {
 }
 
 @media (max-width: 900px) {
+  /* Two independently-scrolling, viewport-height panels side by side make
+     sense on desktop; stacked on a narrow screen they'd each claim half the
+     viewport height and feel cramped. Below this width, fall back to one
+     normal scrolling page instead. */
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+  }
+
+  .app-shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
   .split-screen {
     flex-direction: column;
+    min-height: auto;
+  }
+
+  .panel {
+    min-height: auto;
+  }
+
+  .panel-body {
+    overflow-y: visible;
   }
 
   .raven-header-top {
@@ -1244,6 +1547,25 @@ body {
   color: var(--raven-text-muted);
 }
 
+.pet-card-health {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+.pet-card-health-ok {
+  color: var(--status-ok);
+  font-weight: 600;
+}
+
+.pet-card-health-warn {
+  color: var(--raven-text-muted);
+  font-weight: 600;
+}
+
+.pet-card-health-visits {
+  color: var(--raven-text-muted);
+}
+
 .pet-card-bio {
   font-size: 0.82rem;
   line-height: 1.5;
@@ -1363,7 +1685,47 @@ body {
   border-radius: 12px;
   font-size: 0.85rem;
   line-height: 1.45;
-  white-space: pre-wrap;
+}
+
+/* Message text is rendered from sanitized Markdown (see ChatDrawer.jsx) —
+   these reset block-element margins so paragraphs/lists read naturally
+   inside a small bubble instead of with default browser spacing. */
+.chat-bubble > *:first-child {
+  margin-top: 0;
+}
+
+.chat-bubble > *:last-child {
+  margin-bottom: 0;
+}
+
+.chat-bubble p {
+  margin: 0.4em 0;
+}
+
+.chat-bubble ul,
+.chat-bubble ol {
+  margin: 0.4em 0;
+  padding-left: 1.3em;
+}
+
+.chat-bubble li {
+  margin: 0.15em 0;
+}
+
+.chat-bubble code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-bubble-user code {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.chat-bubble a {
+  color: inherit;
+  text-decoration: underline;
 }
 
 .chat-bubble-user {
@@ -1391,12 +1753,13 @@ body {
 
 .chat-drawer-input-row {
   display: flex;
+  align-items: flex-end;
   gap: 0.5rem;
   padding: 0.9rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.chat-drawer-input-row input {
+.chat-drawer-input-row textarea {
   flex: 1;
   font-family: inherit;
   font-size: 0.85rem;
@@ -1405,6 +1768,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(0, 0, 0, 0.25);
   color: var(--raven-text);
+  resize: vertical;
+  min-height: 2.2em;
+  max-height: 8em;
+  line-height: 1.4;
 }
 
 .chat-drawer-input-row button {

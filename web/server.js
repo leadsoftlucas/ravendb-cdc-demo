@@ -6,6 +6,7 @@ const path = require("path");
 const { getSqlStatus } = require("./routes/sqlStatus");
 const { getRavenStatus } = require("./routes/ravenStatus");
 const { getCaptureStatus, setCaptureEnabled } = require("./routes/cdcCapture");
+const { getCdcLog } = require("./routes/cdcLog");
 const {
   getSchema,
   listRows,
@@ -56,6 +57,11 @@ app.get("/api/sql/cdc-capture", async (req, res) => {
 
 app.post("/api/sql/cdc-capture", async (req, res) => {
   res.json(await setCaptureEnabled(Boolean(req.body.enabled)));
+});
+
+app.get("/api/sql/cdc-log", async (req, res) => {
+  const limit = Math.min(50, Number(req.query.limit) || 20);
+  res.json(await getCdcLog(limit));
 });
 
 app.get("/api/sql/schema", async (req, res) => {

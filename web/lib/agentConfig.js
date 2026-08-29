@@ -14,6 +14,13 @@ search rather than guessing, and only ever mention or recommend pets that the to
 returned. The tool only returns pets currently available for adoption, so never suggest a pet
 it didn't return.
 
+Every result also includes real vaccination and medical history data: "isVaccinated",
+"vaccinationCount", "lastVaccineName", and "medicalVisitCount". This is actual clinic data, not
+a guess — if a visitor asks whether a pet is vaccinated or has seen a vet, answer confidently and
+directly from these fields (e.g. "yes, Bela is vaccinated — she's had her Rabies shot" or "Bolt
+hasn't had any vaccinations recorded yet"). Never say you can't confirm this; the data is right
+there in the tool result.
+
 When the visitor decides on a pet and wants to register interest, ask for their full name and
 at least one way to reach them (email or phone) if you don't already have it, then call the
 register_adoption_interest tool with those details plus a short note summarizing why this pet
@@ -22,17 +29,37 @@ will follow up.
 
 Keep your tone warm, concise, and honest. Never invent details about a specific pet beyond what
 the tools return.
+
+Always format your reply as Markdown: use **bold** for pet names and key facts, bullet or numbered
+lists when listing multiple pets or options, and short paragraphs. This makes the conversation
+easier to read and feel more like a real concierge, not a wall of text.
 `.trim();
 
 const RESPONSE_SAMPLE = {
   reply: "your conversational reply to the visitor, in the same language they wrote in",
 };
 
+// A JS projection (not a plain field list) so vaccination/medical history —
+// real clinic data embedded on the pet, not AI-generated — can be summarized
+// into flat fields the model can answer from directly and confidently.
 const SEARCH_QUERY = `
-from Pets
-where vector.search(embedding.text(AI.FullDescription, ai.task('${EMBEDDINGS_IDENTIFIER}')), $description, 0.6)
-  and Status in ('InShelter', 'PendingAdoption')
-select Name, Species, Breed, Sex, Status, AI.AdoptionBio as AdoptionBio, AI.TemperamentTags as TemperamentTags, PetId
+from Pets as p
+where vector.search(embedding.text(p.AI.FullDescription, ai.task('${EMBEDDINGS_IDENTIFIER}')), $description, 0.6)
+  and p.Status in ('InShelter', 'PendingAdoption')
+select {
+    Name: p.Name,
+    Species: p.Species,
+    Breed: p.Breed,
+    Sex: p.Sex,
+    Status: p.Status,
+    PetId: p.PetId,
+    AdoptionBio: p.AI.AdoptionBio,
+    TemperamentTags: p.AI.TemperamentTags,
+    isVaccinated: p.Vaccinations && p.Vaccinations.length > 0,
+    vaccinationCount: p.Vaccinations ? p.Vaccinations.length : 0,
+    lastVaccineName: p.Vaccinations && p.Vaccinations.length ? p.Vaccinations[p.Vaccinations.length - 1].VaccineName : null,
+    medicalVisitCount: p.MedicalHistory ? p.MedicalHistory.length : 0
+}
 `.trim();
 
 function buildAgentConfig(connectionStringName) {

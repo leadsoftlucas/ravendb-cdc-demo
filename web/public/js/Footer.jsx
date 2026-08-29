@@ -7,10 +7,11 @@ const CDC_DOCS = [
 ];
 
 function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="raven-footer">
       <div className="raven-footer-docs">
-        <span className="raven-footer-label">RavenDB CDC documentation:</span>
+        <span className="raven-footer-label">{t("footer.docsLabel")}</span>
         {CDC_DOCS.map((doc) => (
           <a key={doc.href} href={doc.href} target="_blank" rel="noreferrer">
             {doc.label}
@@ -25,7 +26,7 @@ function Footer() {
           target="_blank"
           rel="noreferrer"
         >
-          GitHub repo
+          {t("footer.githubRepo")}
         </a>
         <a className="raven-footer-link" href="https://ravendb.net" target="_blank" rel="noreferrer">
           RavenDB.net

@@ -130,6 +130,7 @@ const TEMPERAMENT_OPTIONS = [
 ];
 
 function TemperamentRadarChart({ pets }) {
+  const { t } = useI18n();
   const counts = TEMPERAMENT_OPTIONS.map(
     (tag) => pets.filter((p) => (p.TemperamentTags || []).includes(tag)).length
   );
@@ -169,7 +170,7 @@ function TemperamentRadarChart({ pets }) {
       <canvas ref={canvasRef} />
     </div>
   ) : (
-    <p className="raven-chart-empty">No AI temperament tags yet — enrich a few pets first.</p>
+    <p className="raven-chart-empty">{t("raven.chartTemperamentEmpty")}</p>
   );
 }
 
@@ -179,6 +180,7 @@ function TemperamentRadarChart({ pets }) {
 // given -> adoptions out) has a visible shape, not a load-bearing dashboard
 // number like the other charts.
 function RescueTimelineChart() {
+  const { t, locale } = useI18n();
   const [timeline, setTimeline] = React.useState(null);
 
   React.useEffect(() => {
@@ -196,10 +198,10 @@ function RescueTimelineChart() {
         data: {
           labels: timeline.months,
           datasets: [
-            { label: "Rescues", data: timeline.rescues, borderColor: CHART_PALETTE[3], tension: 0.3, pointRadius: 2 },
-            { label: "Medical visits", data: timeline.visits, borderColor: CHART_PALETTE[0], tension: 0.3, pointRadius: 2 },
-            { label: "Vaccinations", data: timeline.vaccinations, borderColor: CHART_PALETTE[2], tension: 0.3, pointRadius: 2 },
-            { label: "Approved adoptions", data: timeline.adoptions, borderColor: CHART_PALETTE[1], tension: 0.3, pointRadius: 2 },
+            { label: t("raven.timelineRescues"), data: timeline.rescues, borderColor: CHART_PALETTE[3], tension: 0.3, pointRadius: 2 },
+            { label: t("raven.timelineVisits"), data: timeline.visits, borderColor: CHART_PALETTE[0], tension: 0.3, pointRadius: 2 },
+            { label: t("raven.timelineVaccinations"), data: timeline.vaccinations, borderColor: CHART_PALETTE[2], tension: 0.3, pointRadius: 2 },
+            { label: t("raven.timelineAdoptions"), data: timeline.adoptions, borderColor: CHART_PALETTE[1], tension: 0.3, pointRadius: 2 },
           ],
         },
         options: {
@@ -210,11 +212,11 @@ function RescueTimelineChart() {
           },
         },
       },
-    [timeline && JSON.stringify(timeline)]
+    [timeline && JSON.stringify(timeline), locale]
   );
 
   if (!timeline || timeline.months.length === 0) {
-    return <p className="raven-chart-empty">Not enough dated activity yet to chart a timeline.</p>;
+    return <p className="raven-chart-empty">{t("raven.chartTimelineEmpty")}</p>;
   }
 
   return (
@@ -227,6 +229,7 @@ function RescueTimelineChart() {
 const PULSE_WINDOW = 30;
 
 function CdcPulseChart() {
+  const { t } = useI18n();
   const [samples, setSamples] = React.useState([]);
   const lastEtag = React.useRef(null);
 
@@ -262,7 +265,7 @@ function CdcPulseChart() {
         labels,
         datasets: [
           {
-            label: "Document changes",
+            label: t("raven.pulseLegend"),
             data: samples,
             borderColor: CHART_PALETTE[2],
             backgroundColor: "rgba(55, 196, 172, 0.2)",

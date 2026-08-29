@@ -1,12 +1,13 @@
 function SqlSidebar() {
+  const { t, tTable } = useI18n();
   const { schema, schemaError, selectedTable, openTable } = useSql();
 
   if (schemaError) {
-    return <nav className="sql-sidebar sql-sidebar-loading">Couldn't load tables: {schemaError}</nav>;
+    return <nav className="sql-sidebar sql-sidebar-loading">{t("sql.sidebarError", { error: schemaError })}</nav>;
   }
 
   if (!schema) {
-    return <nav className="sql-sidebar sql-sidebar-loading">Loading tables…</nav>;
+    return <nav className="sql-sidebar sql-sidebar-loading">{t("sql.sidebarLoading")}</nav>;
   }
 
   return (
@@ -20,7 +21,7 @@ function SqlSidebar() {
             className={`sql-sidebar-item ${name === selectedTable ? "sql-sidebar-item-active" : ""}`}
             onClick={() => openTable(name)}
           >
-            <span>{table.label}</span>
+            <span>{tTable(name, table.label)}</span>
             <span className="sql-sidebar-count">{table.rowCount}</span>
           </button>
         );

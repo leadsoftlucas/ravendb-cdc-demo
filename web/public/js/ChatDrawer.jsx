@@ -1,3 +1,11 @@
+// marked + DOMPurify are loaded from CDN (see index.html) — Markdown is
+// rendered to HTML and sanitized before being injected, since this renders
+// both the AI Agent's replies AND the visitor's own typed message.
+function renderMarkdown(text) {
+  const html = window.marked.parse(text, { breaks: true });
+  return { __html: window.DOMPurify.sanitize(html) };
+}
+
 function getOrCreateConversationId() {
   let id = localStorage.getItem("adoption-chat-id");
   if (!id) {
@@ -8,6 +16,7 @@ function getOrCreateConversationId() {
 }
 
 function ChatDrawer({ open, onClose, prefill, onConsumePrefill }) {
+  const { t } = useI18n();
   const [conversationId] = React.useState(getOrCreateConversationId);
   const [messages, setMessages] = React.useState([]);
   const [input, setInput] = React.useState("");
@@ -55,42 +64,45 @@ function ChatDrawer({ open, onClose, prefill, onConsumePrefill }) {
     send();
   }
 
+  function handleKeyDown(e) {
+    // Enter sends; Shift+Enter inserts a newline — needed to actually type
+    // multi-line Markdown (lists, paragraphs) into the box.
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (!sending && input.trim()) send();
+    }
+  }
+
   return (
     <div className={`chat-drawer ${open ? "chat-drawer-open" : ""}`}>
       <div className="chat-drawer-header">
-        <h3>🐾 Adoption Concierge</h3>
-        <button type="button" className="chat-drawer-close" onClick={onClose} aria-label="Close chat">
+        <h3>{t("chat.title")}</h3>
+        <button type="button" className="chat-drawer-close" onClick={onClose} aria-label={t("chat.close")}>
           ×
         </button>
       </div>
 
       <div className="chat-drawer-messages" ref={listRef}>
-        {messages.length === 0 && (
-          <p className="chat-drawer-empty">
-            Tell me what you're looking for — size, temperament, energy level — and I'll help you find the
-            right pet, and register your interest with the shelter when you're ready.
-          </p>
-        )}
+        {messages.length === 0 && <p className="chat-drawer-empty">{t("chat.empty")}</p>}
         {messages.map((m, i) => (
-          <div key={i} className={`chat-bubble chat-bubble-${m.role}`}>
-            {m.text}
-          </div>
+          <div key={i} className={`chat-bubble chat-bubble-${m.role}`} dangerouslySetInnerHTML={renderMarkdown(m.text)} />
         ))}
-        {sending && <div className="chat-bubble chat-bubble-assistant chat-bubble-pending">Thinking…</div>}
+        {sending && <div className="chat-bubble chat-bubble-assistant chat-bubble-pending">{t("chat.thinking")}</div>}
       </div>
 
       {error && <div className="raven-error chat-drawer-error">{error}</div>}
 
       <form className="chat-drawer-input-row" onSubmit={handleSubmit}>
-        <input
-          type="text"
+        <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message…"
+          onKeyDown={handleKeyDown}
+          placeholder={t("chat.placeholder")}
           disabled={sending}
+          rows={1}
         />
         <button type="submit" disabled={sending || !input.trim()}>
-          Send
+          {t("chat.send")}
         </button>
       </form>
     </div>

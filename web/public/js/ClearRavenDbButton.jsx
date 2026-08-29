@@ -4,32 +4,26 @@
 // time and show each step's effect from a clean slate.
 
 function ClearRavenDbButton() {
+  const { t } = useI18n();
   const [busy, setBusy] = React.useState(false);
 
   async function clearRaven() {
-    if (
-      !window.confirm(
-        "This deletes every document and collection in RavenDB (including system collections like @embeddings and @cdc-states) " +
-          "and turns off CDC Sink, GenAI, Embeddings, and the Adoption Concierge. Continue?"
-      )
-    ) {
-      return;
-    }
+    if (!window.confirm(t("raven.clearConfirm"))) return;
     setBusy(true);
     try {
       const res = await fetch("/api/raven/clear", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to clear RavenDB.");
+      if (!res.ok) throw new Error(data.error || t("raven.clearFailed"));
       window.location.reload();
     } catch (err) {
-      window.alert(`Error: ${err.message}`);
+      window.alert(t("raven.errorPrefix", { message: err.message }));
       setBusy(false);
     }
   }
 
   return (
     <button type="button" className="panel-admin-button" disabled={busy} onClick={clearRaven}>
-      {busy ? "Clearing…" : "🧹 Clear RavenDB"}
+      {busy ? t("raven.clearButtonBusy") : t("raven.clearButton")}
     </button>
   );
 }

@@ -4,32 +4,26 @@
 // repopulation instead of syncing on top of whatever the demo left behind.
 
 function ResetSqlDataButton() {
+  const { t } = useI18n();
   const [busy, setBusy] = React.useState(false);
 
   async function resetSql() {
-    if (
-      !window.confirm(
-        "This restores SQL Server to its original seed data (undoing anything added or changed during this demo) " +
-          "and turns off CDC Sink. Continue?"
-      )
-    ) {
-      return;
-    }
+    if (!window.confirm(t("sqlReset.confirm"))) return;
     setBusy(true);
     try {
       const res = await fetch("/api/sql/reset", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to reset SQL Server data.");
+      if (!res.ok) throw new Error(data.error || t("sqlReset.failed"));
       window.location.reload();
     } catch (err) {
-      window.alert(`Error: ${err.message}`);
+      window.alert(t("raven.errorPrefix", { message: err.message }));
       setBusy(false);
     }
   }
 
   return (
     <button type="button" className="panel-admin-button" disabled={busy} onClick={resetSql}>
-      {busy ? "Resetting…" : "↺ Reset SQL Server data"}
+      {busy ? t("sqlReset.buttonBusy") : t("sqlReset.button")}
     </button>
   );
 }

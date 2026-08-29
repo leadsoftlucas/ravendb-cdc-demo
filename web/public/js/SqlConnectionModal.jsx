@@ -6,6 +6,7 @@
 // works against any reachable SQL Server.
 
 function SqlConnectionModal({ onClose, onChanged }) {
+  const { t } = useI18n();
   const [form, setForm] = React.useState({
     host: "",
     port: 1433,
@@ -67,64 +68,70 @@ function SqlConnectionModal({ onClose, onChanged }) {
     <div className="connection-modal-backdrop" onClick={onClose}>
       <div className="connection-modal" onClick={(e) => e.stopPropagation()}>
         <div className="connection-modal-header">
-          <h3>SQL Server connection</h3>
-          <button type="button" className="connection-modal-close" onClick={onClose} aria-label="Close">
+          <h3>{t("sqlModal.title")}</h3>
+          <button type="button" className="connection-modal-close" onClick={onClose} aria-label={t("modal.close")}>
             ×
           </button>
         </div>
 
         {!loaded ? (
-          <p className="connection-modal-loading">Loading current settings…</p>
+          <p className="connection-modal-loading">{t("modal.loading")}</p>
         ) : (
           <form onSubmit={handleSubmit}>
             <label>
-              Host
+              {t("sqlModal.host")}
               <input type="text" value={form.host} onChange={(e) => set("host", e.target.value)} required />
             </label>
             <label>
-              Port
+              {t("sqlModal.port")}
               <input type="number" value={form.port} onChange={(e) => set("port", e.target.value)} required />
             </label>
             <label>
-              Database
+              {t("sqlModal.database")}
               <input type="text" value={form.database} onChange={(e) => set("database", e.target.value)} required />
             </label>
             <label>
-              User
+              {t("sqlModal.user")}
               <input type="text" value={form.user} onChange={(e) => set("user", e.target.value)} required />
             </label>
             <label>
-              Password
+              {t("sqlModal.password")}
               <input
                 type="password"
                 value={form.password}
                 onChange={(e) => set("password", e.target.value)}
-                placeholder="Leave blank to keep the current password"
+                placeholder={t("sqlModal.passwordPlaceholder")}
               />
             </label>
             <label>
-              Environment label <span className="connection-modal-hint">(shown in the footer)</span>
+              {t("sqlModal.environment")} <span className="connection-modal-hint">{t("modal.hintFooter")}</span>
               <input type="text" value={form.environment} onChange={(e) => set("environment", e.target.value)} />
             </label>
 
             <label className="connection-modal-checkbox">
               <input type="checkbox" checked={form.provision} onChange={(e) => set("provision", e.target.checked)} />
-              Provision the full environment on this server (create the database, schema, seed data, and enable CDC)
+              {t("sqlModal.provisionCheckbox")}
             </label>
 
             {error && <div className="connection-modal-error">{error}</div>}
             {result && !error && (
               <div className="connection-modal-success">
-                Connected to {result.connection.host}:{result.connection.port}/{result.connection.database}.
+                {t("sqlModal.connectedTo", {
+                  host: result.connection.host,
+                  port: result.connection.port,
+                  database: result.connection.database,
+                })}
                 {result.provisioning && (
                   <>
                     {" "}
-                    {result.provisioning.databaseCreated ? "Database created. " : "Database already existed. "}
-                    Seeded {Object.values(result.provisioning.rowsSeeded).reduce((a, b) => a + b, 0)} rows across{" "}
-                    {Object.keys(result.provisioning.rowsSeeded).length} tables.{" "}
+                    {result.provisioning.databaseCreated ? t("sqlModal.databaseCreated") : t("sqlModal.databaseExisted")}{" "}
+                    {t("sqlModal.seededSummary", {
+                      rows: Object.values(result.provisioning.rowsSeeded).reduce((a, b) => a + b, 0),
+                      tables: Object.keys(result.provisioning.rowsSeeded).length,
+                    })}{" "}
                     {result.provisioning.cdc.ok
-                      ? "CDC enabled."
-                      : `CDC could not be enabled: ${result.provisioning.cdc.error}`}
+                      ? t("sqlModal.cdcEnabled")
+                      : t("sqlModal.cdcFailed", { error: result.provisioning.cdc.error })}
                   </>
                 )}
               </div>
@@ -132,10 +139,10 @@ function SqlConnectionModal({ onClose, onChanged }) {
 
             <div className="connection-modal-actions">
               <button type="button" className="connection-modal-cancel" onClick={onClose} disabled={saving}>
-                Close
+                {t("modal.close")}
               </button>
               <button type="submit" className="connection-modal-save" disabled={saving}>
-                {saving ? (form.provision ? "Provisioning… this can take a minute" : "Saving…") : "Save"}
+                {saving ? (form.provision ? t("modal.provisioning") : t("modal.saving")) : t("modal.save")}
               </button>
             </div>
           </form>

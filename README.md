@@ -2,21 +2,21 @@
 
 **🇧🇷 Leia em português: [README.pt-BR.md](README.pt-BR.md)**
 
-> **TL;DR** — SQL Server keeps doing its job, untouched. RavenDB's **CDC Sink** quietly streams every change into well-shaped documents next door, where AI turns raw notes into pet bios, vector search finds "a calm dog good with kids," and an AI Agent can register a real adoption lead that flows all the way back into SQL Server. Two databases, one story, zero rewrites of the legacy app.
+> **TL;DR** — SQL Server keeps doing its job, untouched. [RavenDB](https://ravendb.net)'s **CDC Sink** quietly streams every change into well-shaped documents next door, where AI turns raw notes into pet bios, vector search finds "a calm dog good with kids," and an AI Agent can register a real adoption lead that flows all the way back into SQL Server. Two databases, one story, zero rewrites of the legacy app.
 
-> 💰 **Before you clone this — what it actually costs:** RavenDB's free **Developer license** already unlocks every Enterprise feature this demo uses (CDC Sink included) for local testing — you don't need to buy anything just to try it out. The one real cost is the AI side: by default, GenAI/Embeddings/the Agent call OpenAI, so running the full pipeline spends a few cents in real tokens each time. Don't want to spend anything? RavenDB's AI integration also supports self-hosted models via [Ollama](https://ollama.com) — you'd configure that connection string by hand in RavenDB Studio instead of pasting an OpenAI key into the [connection modal](#-point-this-at-your-own-servers) (which only automates OpenAI provisioning today).
+> 💰 **Before you clone this — what it actually costs:** [RavenDB](https://ravendb.net)'s free **Developer license** already unlocks every Enterprise feature this demo uses (CDC Sink included) for local testing — you don't need to buy anything just to try it out. The one real cost is the AI side: by default, GenAI/Embeddings/the Agent call OpenAI, so running the full pipeline spends a few cents in real tokens each time. Don't want to spend anything? [RavenDB](https://ravendb.net)'s AI integration also supports self-hosted models via [Ollama](https://ollama.com) — you'd configure that connection string by hand in RavenDB Studio instead of pasting an OpenAI key into the [connection modal](#-point-this-at-your-own-servers) (which only automates OpenAI provisioning today).
 
 ## 👋 About me
 
-Hi, I'm **Lucas Tavares**, a Technical Solutions Consultant at [RavenDB](https://ravendb.net). I spend my days helping teams figure out how a document database fits into systems that already work — not instead of them.
+Hi, I'm **Lucas Tavares**, a Technical Solutions Consultant at [RavenDB](https://ravendb.net). I spend my days helping teams figure out how a document database fits into systems that already work — not instead of them. This is one slice of that job: I build demos for all kinds of problems — this one just happens to be about CDC.
 
-This repo is the companion piece to an article I'm writing around one simple idea. Read on. 👇
+This repo is the companion piece to an article I wrote around one simple idea — **[read it on LinkedIn](https://www.linkedin.com/pulse/ningu%C3%A9m-te-disse-que-d%C3%A1-pra-ter-ia-sem-migrar-seu-de-resende-tavares-jrzxf)** for the full story (in Portuguese), or keep reading here for the technical deep-dive. 👇
 
 ## 💡 The idea: RavenDB *on top*
 
-You don't have to rip out a working relational database to get RavenDB's benefits — flexible documents, native vector search, AI-powered enrichment, a much friendlier query experience for modern apps.
+You don't have to rip out a working relational database to get [RavenDB](https://ravendb.net)'s benefits — flexible documents, native vector search, AI-powered enrichment, a much friendlier query experience for modern apps.
 
-**Change Data Capture (CDC)** is the trick: keep SQL Server (or PostgreSQL, or MySQL) exactly as it is — the system of record, fed by whatever legacy app already writes to it — while RavenDB's [CDC Sink](https://docs.ravendb.net/7.2/server/ongoing-tasks/cdc-sink/overview) continuously reads the change stream and reshapes your normalized tables into denormalized, well-modeled documents. New apps, new frontends, new AI features get built against RavenDB, in parallel, without anyone touching a line of the legacy stack.
+**Change Data Capture (CDC)** is the trick: keep SQL Server (or PostgreSQL, or MySQL) exactly as it is — the system of record, fed by whatever legacy app already writes to it — while [RavenDB](https://ravendb.net)'s [CDC Sink](https://docs.ravendb.net/7.2/server/ongoing-tasks/cdc-sink/overview) continuously reads the change stream and reshapes your normalized tables into denormalized, well-modeled documents. New apps, new frontends, new AI features get built against [RavenDB](https://ravendb.net), in parallel, without anyone touching a line of the legacy stack.
 
 To make that concrete instead of abstract, this demo picks a domain everyone can relate to, wherever you're reading this from: a 🏥 **veterinary clinic that also runs a pet shelter and adoption program.**
 
@@ -30,7 +30,7 @@ One split-screen web app, two very different personalities on purpose:
 | Point it at *your own* SQL Server via a connection modal | Natural-language ("semantic") pet search |
 | Old-school forms — search, filter, save, done | A chat-based AI concierge that can register a real adoption lead |
 
-The legacy app still owns the source of truth — nothing about how it works changes. The one deliberate exception: when a visitor registers interest in a pet through the RavenDB-powered portal, that flows *back* into SQL Server too (via SQL ETL). RavenDB sitting on top of a legacy system isn't a one-way street here — it's proven in both directions.
+The legacy app still owns the source of truth — nothing about how it works changes. The one deliberate exception: when a visitor registers interest in a pet through the [RavenDB](https://ravendb.net)-powered portal, that flows *back* into SQL Server too (via SQL ETL). [RavenDB](https://ravendb.net) sitting on top of a legacy system isn't a one-way street here — it's proven in both directions.
 
 > ✅ **Status:** everything below is built and working, right now — SQL Server schema, CDC Sink, GenAI enrichment, embeddings, the AI Agent, the SQL ETL write-back, both halves of the web app, and the "point this at your own servers" provisioning flow. Nothing in this README is aspirational.
 
@@ -150,7 +150,7 @@ This is deliberately relational — foreign keys, a 1:1 extension, an optional l
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows 10/11 with WSL2)
 - [PowerShell](https://learn.microsoft.com/en-us/powershell/) for the setup script
 - [Node.js](https://nodejs.org) 18+ for the web app
-- A RavenDB server, 7.2+, **Enterprise license** (CDC Sink is Enterprise-only) — needed a bit later, not for step 1
+- A [RavenDB server, 7.2+](https://ravendb.net/download), **Enterprise license** (CDC Sink is Enterprise-only) — needed a bit later, not for step 1
 
 ### 1️⃣ Run SQL Server in Docker
 
@@ -233,13 +233,15 @@ start.bat
 
 This kills any previous instance on the port, installs npm packages on first run, starts the server, and opens `http://localhost:4000` in your browser the moment it responds. `Ctrl+C` to stop (cmd.exe will ask you to confirm).
 
-**That's it — no manual RavenDB Studio setup required.** On every boot, the app itself creates the CDC Sink task, the GenAI/Embeddings tasks, the SQL ETL task, the AI Agent, and a dashboard index — see "Zero manual setup" further down.
+**That's it — no manual [RavenDB](https://ravendb.net) Studio setup required.** On every boot, the app itself creates the CDC Sink task, the GenAI/Embeddings tasks, the SQL ETL task, the AI Agent, and a dashboard index — see "Zero manual setup" further down.
 
 ## 🌐 Tour of the app
 
-The two panels are deliberately styled after their real-world counterparts, so it's obvious at a glance you're looking at two different systems: the **SQL Server panel** borrows Microsoft's own look (Segoe UI, Microsoft blue), and the **RavenDB panel** — plus the shared header/footer — borrows RavenDB's brand (Figtree, the blue-to-purple gradient, dark navy, the real logo).
+The two panels are deliberately styled after their real-world counterparts, so it's obvious at a glance you're looking at two different systems: the **SQL Server panel** borrows Microsoft's own look (Segoe UI, Microsoft blue), and the **[RavenDB](https://ravendb.net) panel** — plus the shared header/footer — borrows [RavenDB](https://ravendb.net)'s brand (Figtree, the blue-to-purple gradient, dark navy, the real logo).
 
-Each panel has a live status footer (host/URL, database, table/collection count, a green/red dot) and a short "Learn more" blurb up top.
+Each panel has a live status footer (host/URL, database, table/collection count, a green/red dot) and a short "Learn more" blurb up top. The RavenDB panel's footer also has an **Open Studio ↗** link straight to that server's Studio, in a new tab.
+
+The page itself never scrolls — it's pinned to the browser's viewport height. Each panel scrolls independently instead, with a thin, theme-matched scrollbar, so both panels' headers and footers (connection status, admin buttons) stay visible no matter how far you've scrolled into either one's content.
 
 ### 🩺 The SQL Server panel
 
@@ -252,20 +254,22 @@ A small, generic admin UI driven by one config file ([`web/schema/tables.js`](we
 - ✏️ Editing is explicit: **Edit → change fields → Save/Cancel**. **Delete** confirms first. No autosave, on purpose — this is meant to feel like the classic line-of-business tool it's standing in for.
 - ⏯️ A **CDC capture toggle** in the top-right corner starts/stops replication live, mid-demo, via `sys.sp_cdc_stop_job`/`start_job` — instant, no risk to the container's data.
 - ⚙️ A gear icon opens the [connection settings modal](#-point-this-at-your-own-servers) — and next to it, **↺ Reset SQL Server data**, covered below.
+- 📜 A **▾ CDC log** button in the footer expands a live view of the *raw* rows SQL Server's CDC actually records — straight from the `cdc.<table>_CT` change tables, the exact stream RavenDB's CDC Sink polls. Table, operation (insert/update/delete), record, timestamp — refreshed every few seconds, with an explanation of what's CDC-enabled vs. what actually reaches RavenDB. Make an edit anywhere and watch it show up here almost instantly.
+- ⓘ Small info icons sit next to the CDC toggles (both panels) explaining what each one actually does on hover — the goal throughout is that nothing here requires reading this README to understand while watching it live.
 
 ### 🐕 The RavenDB panel: an AI-powered adoption portal
 
-This side doesn't mirror the SQL admin grid at all — on purpose. It's a small **pet adoption portal**: a dashboard, AI-written bios, semantic search, and a chat-based "adoption concierge" that can register a real lead on a visitor's behalf, closing the loop back into SQL Server. The point: RavenDB doesn't need to replicate the whole legacy schema, only the slice that's useful for a new, customer-facing experience.
+This side doesn't mirror the SQL admin grid at all — on purpose. It's a small **pet adoption portal**: a dashboard, AI-written bios, semantic search, and a chat-based "adoption concierge" that can register a real lead on a visitor's behalf, closing the loop back into SQL Server. The point: [RavenDB](https://ravendb.net) doesn't need to replicate the whole legacy schema, only the slice that's useful for a new, customer-facing experience.
 
 Everything here is live — a real CDC Sink task, real GenAI/Embeddings tasks calling OpenAI, a real AI Agent, a real SQL ETL write-back. Nothing mocked.
 
 #### A deliberately incomplete data model
 
-CDC Sink syncs **two** RavenDB collections out of nine SQL tables — that gap *is* the point:
+CDC Sink syncs **two** [RavenDB](https://ravendb.net) collections out of nine SQL tables — that gap *is* the point:
 
 - **`Pets`** (root): pet fields, plus `MedicalHistory`, `Vaccinations`, and `AdoptionHistory` **embedded** as arrays, and a **linked** reference to the pet's `Owner` (→ `People`).
 - **`People`** (root): trimmed to just what the portal needs — name, contact, city.
-- `Employees`, `Veterinarians`, `Clinics`, `Adoptions` **never become RavenDB collections** — internal clinic bookkeeping with no reason to exist in a public adoption app. `AdoptionApplications` *is* embedded, specifically so a new application created through the portal flows back and shows up right there on the pet (more on that below).
+- `Employees`, `Veterinarians`, `Clinics`, `Adoptions` **never become [RavenDB](https://ravendb.net) collections** — internal clinic bookkeeping with no reason to exist in a public adoption app. `AdoptionApplications` *is* embedded, specifically so a new application created through the portal flows back and shows up right there on the pet (more on that below).
 
 #### 🤖 The AI pipeline
 
@@ -281,9 +285,11 @@ flowchart LR
     Staging -.->|staff triage, via the SQL panel| SQL
 ```
 
-1. **[GenAI Task](https://docs.ravendb.net/7.2/ai-integration/gen-ai-integration/overview)** watches `Pets`. Per document, a context script builds a small object from the pet's raw fields, sends it with a prompt + JSON schema to the model, and an update script writes the answer back — producing `AI.AdoptionBio`, `AI.TemperamentTags`, and `AI.FullDescription` (the field vector search targets). RavenDB hashes the context+prompt+schema to skip unchanged documents — that hash has to be on the pet's *source* fields, never the AI-generated ones, or it loops forever.
+1. **[GenAI Task](https://docs.ravendb.net/7.2/ai-integration/gen-ai-integration/overview)** watches `Pets`. Per document, a context script builds a small object from the pet's raw fields, sends it with a prompt + JSON schema to the model, and an update script writes the answer back — producing `AI.AdoptionBio`, `AI.TemperamentTags`, and `AI.FullDescription` (the field vector search targets). [RavenDB](https://ravendb.net) hashes the context+prompt+schema to skip unchanged documents — that hash has to be on the pet's *source* fields, never the AI-generated ones, or it loops forever.
 2. **[Embeddings Generation Task](https://docs.ravendb.net/7.2/ai-integration/generating-embeddings/embeddings-generation-task)** watches `Pets`, reads `AI.FullDescription`, stores a vector. This is what makes "a calm dog, good with kids, small breed" actually work as a search.
 3. **[AI Agent](https://docs.ravendb.net/7.2/ai-integration/ai-agents/overview)** ("Adoption Concierge") — one *query tool* (vector search, restricted to pets actually available — never `Owned`/`ClinicPatient`) and one *action tool*, `register_adoption_interest`. Key fact from the docs: **the LLM never touches the database directly.** It can only request an action; the Node backend fulfills it via `chat.Handle(actionName, callback)`, registered before the conversation runs — the callback executes synchronously and can store a document right there. No webhook, no queue.
+   - The query tool's result isn't just AI-written text — it's a JS projection pulling **real vaccination and medical-visit data** straight from the pet's embedded `Vaccinations`/`MedicalHistory` arrays (`isVaccinated`, `lastVaccineName`, `medicalVisitCount`), so the concierge can answer "is this pet vaccinated?" from actual clinic records instead of guessing or hedging.
+   - The system prompt asks the model to always reply in Markdown; the chat UI renders it (via `marked` + `DOMPurify`, sanitized) — bold, lists, the works. The visitor's own input is Markdown-aware too (a real textarea, Shift+Enter for a newline).
 
 #### 🔁 Closing the loop back to SQL Server
 
@@ -291,7 +297,7 @@ The obvious move — have SQL ETL write a new adoption interest straight into `P
 
 **What happens instead:** the agent's action handler stores each interest as an `AdoptionInterests` document. One SQL ETL task, one script, two `loadTo` calls: the interest lands in a new denormalized staging table (`PortalAdoptionRequests`) *and* directly in `AdoptionApplications` (`ApplicantId = NULL`, `Source = 'Portal'`, contact details in new `External*` columns). Staff triage and "promote" a genuine lead into a real `People` row using the SQL panel already built here.
 
-That new `AdoptionApplications` row — with its real, SQL-generated `ApplicationId` — gets picked up by CDC Sink moments later and appended to the same pet's `AdoptionHistory` array, back in RavenDB. Chat with the concierge, register interest, watch the confirmed application show up on the pet's own document. A live, two-way loop — not a one-off webhook.
+That new `AdoptionApplications` row — with its real, SQL-generated `ApplicationId` — gets picked up by CDC Sink moments later and appended to the same pet's `AdoptionHistory` array, back in [RavenDB](https://ravendb.net). Chat with the concierge, register interest, watch the confirmed application show up on the pet's own document. A live, two-way loop — not a one-off webhook.
 
 #### 🔐 No login, ever
 
@@ -314,32 +320,32 @@ Up in the panel header: four independent toggles (**CDC Sink**, **GenAI**, **Emb
 
 #### 🧹 Resetting the demo
 
-Two admin buttons, deliberately placed next to the toggle they affect rather than lumped together — the SQL Server panel gets the SQL reset, the RavenDB panel gets the RavenDB reset:
+Two admin buttons, deliberately placed next to the toggle they affect rather than lumped together — the SQL Server panel gets the SQL reset, the [RavenDB](https://ravendb.net) panel gets the [RavenDB](https://ravendb.net) reset:
 
 - **↺ Reset SQL Server data** (SQL Server panel, next to the CDC capture toggle) restores the original seed rows and turns off CDC Sink.
 - **🧹 Clear RavenDB** (RavenDB panel, next to the four toggles) deletes every document and collection — including the `@`-prefixed system ones (`@embeddings/Pets`, `@embeddings-cache`, `@cdc-states`, `@conversations`) — and turns off CDC Sink, GenAI, Embeddings, and the concierge all at once.
 
-Run both, and you're back to an empty portal. Flip CDC Sink back on and watch RavenDB **repopulate live** from SQL Server, then bring GenAI, Embeddings, and the concierge back one at a time — the "magic" happens in front of the audience, one step at a time, instead of all at once before anyone's watching.
+Run both, and you're back to an empty portal. Flip CDC Sink back on and watch [RavenDB](https://ravendb.net) **repopulate live** from SQL Server, then bring GenAI, Embeddings, and the concierge back one at a time — the "magic" happens in front of the audience, one step at a time, instead of all at once before anyone's watching.
 
 ### ⚡ Zero manual setup — the app provisions itself
 
-On every server start, [`web/lib/ravenBootstrap.js`](web/lib/ravenBootstrap.js) idempotently creates (or updates) the SQL connection string, the CDC Sink task, GenAI + Embeddings tasks, the SQL ETL task, the AI Agent, and the dashboard index. Requires an Enterprise-licensed RavenDB 7.2+ server with AI Integration on, and (unless you provision them via the modal below) the `GenAI`/`TextEmbedding` AI connection strings already set up in Studio.
+On every server start, [`web/lib/ravenBootstrap.js`](web/lib/ravenBootstrap.js) idempotently creates (or updates) the SQL connection string, the CDC Sink task, GenAI + Embeddings tasks, the SQL ETL task, the AI Agent, and the dashboard index. Requires an Enterprise-licensed [RavenDB 7.2+](https://ravendb.net/download) server with AI Integration on, and (unless you provision them via the modal below) the `GenAI`/`TextEmbedding` AI connection strings already set up in Studio.
 
 ### 🔧 Point this at your own servers
 
 Both panels have a **⚙ gear icon** in their header — a connection-settings modal that's what actually makes this demo reusable instead of tied to one Docker setup. Changes are runtime-only (nothing gets written to `.env`, so a restart reverts) — the point is trying this against a server you already have, with zero file editing.
 
 - **SQL Server modal**: host, port, database, user, password. Tick **"provision the full environment"** and the backend creates the database (if missing), the whole schema, the original seed data, and enables CDC on every table — over a plain network connection (client-side bulk copy via the `mssql` npm package), **no `docker exec` anywhere.** Works against any reachable SQL Server, not just the bundled container.
-- **RavenDB modal**: URL and database name. Tick the same checkbox and it creates the database (if missing) plus every ongoing task this demo needs — CDC Sink, GenAI, Embeddings, SQL ETL, the Agent, the index. Paste an OpenAI API key in the same modal and it'll create the two AI connection strings for you too, instead of requiring them pre-configured in Studio.
+- **[RavenDB](https://ravendb.net) modal**: URL and database name. Tick the same checkbox and it creates the database (if missing) plus every ongoing task this demo needs — CDC Sink, GenAI, Embeddings, SQL ETL, the Agent, the index. Paste an OpenAI API key in the same modal and it'll create the two AI connection strings for you too, instead of requiring them pre-configured in Studio.
 
-Order matters: point the SQL modal at your server *first*, then the RavenDB one — the tasks it creates reference whatever SQL connection is configured at that moment.
+Order matters: point the SQL modal at your server *first*, then the [RavenDB](https://ravendb.net) one — the tasks it creates reference whatever SQL connection is configured at that moment.
 
 ## 🐛 Two things that went wrong (and how they got fixed)
 
 <details>
 <summary>Worth reading if you're building your own GenAI task or hit a CDC-after-schema-change mystery</summary>
 
-- **The GenAI update script's real convention is `this` / `$output`, not `function update(doc, result)`.** The client library's own JSDoc comment suggests the latter; it compiles, runs with zero errors, quietly marks the document as processed — and never actually writes anything. The working form matches CDC Sink/SQL ETL patch scripts elsewhere in RavenDB: plain statements against `this` (the document), reading the model's answer via `$output.<field>`.
+- **The GenAI update script's real convention is `this` / `$output`, not `function update(doc, result)`.** The client library's own JSDoc comment suggests the latter; it compiles, runs with zero errors, quietly marks the document as processed — and never actually writes anything. The working form matches CDC Sink/SQL ETL patch scripts elsewhere in [RavenDB](https://ravendb.net): plain statements against `this` (the document), reading the model's answer via `$output.<field>`.
 - **SQL Server CDC doesn't notice columns added after `sp_cdc_enable_table` already ran.** Adding `Source`/`External*` to an already-CDC-enabled `AdoptionApplications` left its capture instance stuck on the old column list. Fix: `sp_cdc_disable_table` + `sp_cdc_enable_table` again for that table whenever its schema changes.
 
 </details>
@@ -349,15 +355,17 @@ Order matters: point the SQL modal at your server *first*, then the RavenDB one 
 - [x] SQL Server schema + seed data
 - [x] Enable SQL Server CDC (`sp_cdc_enable_db` / `sp_cdc_enable_table`)
 - [x] Web app scaffold: Express server, React split-screen shell, `start.bat`
-- [x] Branding: Microsoft-styled SQL panel, RavenDB-styled header/footer/panel, live connection status
+- [x] Branding: Microsoft-styled SQL panel, [RavenDB](https://ravendb.net)-styled header/footer/panel, live connection status
 - [x] SQL Server panel: browse, search, filter, view, edit, insert, delete every table
 - [x] **CDC Sink** task (`Pets` + `People`, embedding medical history, vaccinations, and adoption applications)
 - [x] GenAI task: `Pets.IntakeNotes` → `AI.AdoptionBio` + `AI.TemperamentTags` + `AI.FullDescription`
 - [x] Vector/semantic search (Embeddings Generation task + an AI Agent query tool)
-- [x] RavenDB panel: adoption portal dashboard, AI Agent chat concierge, full round-trip via SQL ETL
+- [x] [RavenDB](https://ravendb.net) panel: adoption portal dashboard, AI Agent chat concierge, full round-trip via SQL ETL
 - [x] Admin reset buttons, placed next to the feature each one resets
 - [x] Rescue-to-adoption timeline chart
 - [x] Connection settings modal on each panel — point the app at your own servers and provision the entire environment
+- [x] Full EN/PT-BR interface translation (flag toggle in the header)
+- [x] Live CDC log viewer (SQL Server panel footer) + didactic info hints throughout
 
 ## 📚 RavenDB CDC documentation
 

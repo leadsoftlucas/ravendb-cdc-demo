@@ -9,6 +9,7 @@
 // configured on that server (e.g. set up by hand in Studio).
 
 function RavenConnectionModal({ onClose, onChanged }) {
+  const { t } = useI18n();
   const [form, setForm] = React.useState({
     url: "",
     database: "",
@@ -68,38 +69,38 @@ function RavenConnectionModal({ onClose, onChanged }) {
     <div className="connection-modal-backdrop" onClick={onClose}>
       <div className="connection-modal" onClick={(e) => e.stopPropagation()}>
         <div className="connection-modal-header">
-          <h3>RavenDB connection</h3>
-          <button type="button" className="connection-modal-close" onClick={onClose} aria-label="Close">
+          <h3>{t("ravenModal.title")}</h3>
+          <button type="button" className="connection-modal-close" onClick={onClose} aria-label={t("modal.close")}>
             ×
           </button>
         </div>
 
         {!loaded ? (
-          <p className="connection-modal-loading">Loading current settings…</p>
+          <p className="connection-modal-loading">{t("modal.loading")}</p>
         ) : (
           <form onSubmit={handleSubmit}>
             <label>
-              URL
+              {t("ravenModal.url")}
               <input type="text" value={form.url} onChange={(e) => set("url", e.target.value)} required />
             </label>
             <label>
-              Database
+              {t("sqlModal.database")}
               <input type="text" value={form.database} onChange={(e) => set("database", e.target.value)} required />
             </label>
             <label>
-              Environment label <span className="connection-modal-hint">(shown in the footer)</span>
+              {t("ravenModal.environment")} <span className="connection-modal-hint">{t("modal.hintFooter")}</span>
               <input type="text" value={form.environment} onChange={(e) => set("environment", e.target.value)} />
             </label>
 
             <label className="connection-modal-checkbox">
               <input type="checkbox" checked={form.provision} onChange={(e) => set("provision", e.target.checked)} />
-              Provision the full environment on this server (database, CDC Sink, GenAI, Embeddings, SQL ETL, Agent, index)
+              {t("ravenModal.provisionCheckbox")}
             </label>
 
             {form.provision && (
               <div className="connection-modal-subsection">
                 <label>
-                  OpenAI API key <span className="connection-modal-hint">(optional — leave blank to keep existing AI connection strings)</span>
+                  {t("ravenModal.apiKey")} <span className="connection-modal-hint">{t("ravenModal.apiKeyHint")}</span>
                   <input
                     type="password"
                     value={form.openAiApiKey}
@@ -108,11 +109,11 @@ function RavenConnectionModal({ onClose, onChanged }) {
                   />
                 </label>
                 <label>
-                  Chat model
+                  {t("ravenModal.chatModel")}
                   <input type="text" value={form.chatModel} onChange={(e) => set("chatModel", e.target.value)} />
                 </label>
                 <label>
-                  Embedding model
+                  {t("ravenModal.embeddingModel")}
                   <input
                     type="text"
                     value={form.embeddingModel}
@@ -125,15 +126,15 @@ function RavenConnectionModal({ onClose, onChanged }) {
             {error && <div className="connection-modal-error">{error}</div>}
             {result && !error && (
               <div className="connection-modal-success">
-                Connected to {result.connection.url}/{result.connection.database}.
+                {t("ravenModal.connectedTo", { url: result.connection.url, database: result.connection.database })}
                 {result.provisioning && (
                   <>
                     {" "}
-                    {result.provisioning.databaseCreated ? "Database created. " : "Database already existed. "}
-                    {result.provisioning.aiConnectionStringsCreated
-                      ? "AI connection strings created. "
-                      : ""}
-                    CDC Sink, GenAI, Embeddings, SQL ETL, Agent, and the dashboard index are provisioned.
+                    {result.provisioning.databaseCreated
+                      ? t("ravenModal.databaseCreated")
+                      : t("ravenModal.databaseExisted")}{" "}
+                    {result.provisioning.aiConnectionStringsCreated ? t("ravenModal.aiCreated") + " " : ""}
+                    {t("ravenModal.provisionedSummary")}
                   </>
                 )}
               </div>
@@ -141,10 +142,10 @@ function RavenConnectionModal({ onClose, onChanged }) {
 
             <div className="connection-modal-actions">
               <button type="button" className="connection-modal-cancel" onClick={onClose} disabled={saving}>
-                Close
+                {t("modal.close")}
               </button>
               <button type="submit" className="connection-modal-save" disabled={saving}>
-                {saving ? (form.provision ? "Provisioning… this can take a minute" : "Saving…") : "Save"}
+                {saving ? (form.provision ? t("modal.provisioning") : t("modal.saving")) : t("modal.save")}
               </button>
             </div>
           </form>
